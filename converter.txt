@@ -1,0 +1,87 @@
+#!/bin/bash
+
+decimal_to_hex() {
+    decimal=$1
+    if [ $decimal -lt 16 ]; then
+        case $decimal in
+            0) echo "0" ;;
+            1) echo "1" ;;
+            2) echo "2" ;;
+            3) echo "3" ;;
+            4) echo "4" ;;
+            5) echo "5" ;;
+            6) echo "6" ;;
+            7) echo "7" ;;
+            8) echo "8" ;;
+            9) echo "9" ;;
+            10) echo "A" ;;
+            11) echo "B" ;;
+            12) echo "C" ;;
+            13) echo "D" ;;
+            14) echo "E" ;;
+            15) echo "F" ;;
+            *) echo "Error" ;;
+        esac
+    else
+        hex=""
+        while [ $decimal -gt 0 ]; do
+            remainder=$(( decimal % 16 ))
+            hex="$(printf '%X' $remainder)$hex"
+            decimal=$(( decimal / 16 ))
+        done
+        echo $hex
+    fi
+}
+
+decimal_to_bin() {
+    decimal=$1
+    if [ $decimal -lt 16 ]; then
+        # hardcoded bit
+        case $decimal in
+            0) echo "0000" ;;
+            1) echo "0001" ;;
+            2) echo "0010" ;;
+            3) echo "0011" ;;
+            4) echo "0100" ;;
+            5) echo "0101" ;;
+            6) echo "0110" ;;
+            7) echo "0111" ;;
+            8) echo "1000" ;;
+            9) echo "1001" ;;
+            10) echo "1010" ;;
+            11) echo "1011" ;;
+            12) echo "1100" ;;
+            13) echo "1101" ;;
+            14) echo "1110" ;;
+            15) echo "1111" ;;
+            *) echo "Error" ;;
+        esac
+    else
+        bin=""
+        while [ $decimal -gt 0 ]; do
+            remainder=$(( decimal % 2 ))
+            bin="$remainder$bin"
+            decimal=$(( decimal / 2 ))
+        done
+        echo $(printf "%016d" $bin)
+    fi
+}
+
+
+echo "Enter a decimal number (less than 100000):"
+read decimal
+
+if [[ $decimal -ge 100000 || $decimal -lt 0 ]]; then
+    echo "Error: Please enter a decimal number less than 100000." > "conversion result.txt"
+    exit 1
+fi
+
+
+hexadecimal=$(decimal_to_hex $decimal)
+binary=$(decimal_to_bin $decimal)
+
+{
+    echo "Decimal: $decimal"
+    echo "Hexadecimal: $hexadecimal"
+    echo "Binary: $binary"
+} > "conversion_result.txt"
